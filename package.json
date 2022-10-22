@@ -1,0 +1,30 @@
+{
+  "name": "userapp",
+  "version": "1.0.0",
+  "description": "user app designed for interview purpose",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "server": "nodemon index",
+    "test": "mocha --timeout 10000"
+  },
+  "author": "amarpreet singh",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.1.3",
+    "bcryptjs": "^2.4.3",
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "config": "^3.3.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-validator": "^6.6.1",
+    "jsonwebtoken": "^8.5.1",
+    "mocha": "^10.1.0",
+    "mongoose": "^6.6.0",
+    "nodemon": "^2.0.20",
+    "npm": "^8.19.1",
+    "should": "^13.2.3",
+    "supertest": "^6.3.0"
+  }
+}
