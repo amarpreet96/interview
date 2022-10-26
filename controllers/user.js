@@ -68,7 +68,7 @@ router.post("/register",[
         const user = await User.findOne({ email: req.body.email });
         if (user) {
           const isValidPassword = await bcrypt.compare(req.body.password, user.password);
-          isValidPassword ? res.status(200).json({ message: "Successfully logged in" }) : res.status(400).json({error: {msg: "Invalid Password"}});
+          isValidPassword ? res.status(200).json({ message: "Successfully logged in",id:user._id }) : res.status(400).json({error: {msg: "Invalid Password"}});
         } else {
           console.log( "error message : User does not exist");
           res.status(401).json({error: {msg: "user does not exist"}});
@@ -86,6 +86,8 @@ router.get("/:id", async (req, res) => {
     if(user){
       console.log("fetching user record");
       res.status(200).json(user);
+    }else{
+      res.status(401).json({error: {msg: "user does not exist"}});
     }
   }catch(err){
     console.log("error message:",err.message);
@@ -103,10 +105,11 @@ router.put("/:id",async (req,res)=>{
     let newPassword = req.body.newPassword;
 
     if(password && newPassword){
-        if(newPassword.length>=6){
-          var user = await User.findById(userId);
+      if(newPassword.length>=6){
+        var user = await User.findById(userId);
+        if(user){
           const isMatched = await bcrypt.compare(password, user.password);
-          //If matched then user is allowed to update password
+        //If matched then user is allowed to update password
           if(isMatched){
               //encrypting password
               const salt = await bcrypt.genSalt(10);
@@ -116,9 +119,12 @@ router.put("/:id",async (req,res)=>{
           }else{
             res.status(400).json({error: {msg: "Please enter correct password"}});
           }
-       }else{
-        res.status(400).json({error: {msg: "new password not strong"}});
-       }
+        }else{
+          res.status(401).json({error: {msg: "user does not exist"}});
+        }
+      }else{
+       res.status(400).json({error: {msg: "new password not strong"}});
+      }
     }else{
       await User.findByIdAndUpdate(userId,{ firstname, lastname, email });
       res.status(200).json({message:"user updated successfully"})
